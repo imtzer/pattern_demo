@@ -1,15 +1,31 @@
 package main
 
 import (
-	"pattern/factory"
+	"fmt"
+	"pattern/observer"
 )
 
 func main() {
-	ss := factory.NewSimpleStore()
-	pizza := ss.Order("A")
-	pizza.Show()
+	u1 := &observer.User{
+		Name: "u1",
+	}
+	u2 := &observer.User{
+		Name: "u2",
+	}
+	paperPublisher := observer.NewPaper()
 
-	fm := factory.NewFactoryMethod()
-	pizzaB := fm.Order("B")
-	pizzaB.Show()
+	_ = paperPublisher.Register(u1)
+	_ = paperPublisher.Register(u2)
+	fmt.Println("users msg:")
+	fmt.Print("  ")
+	u1.Show()
+	fmt.Print("  ")
+	u2.Show()
+	fmt.Println("publish new msg...")
+	paperPublisher.NotifyAll("new paper")
+	fmt.Println("users msg:")
+	fmt.Print("  ")
+	u1.Show()
+	fmt.Print("  ")
+	u2.Show()
 }
