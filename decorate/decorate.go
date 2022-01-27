@@ -10,9 +10,7 @@ type Beverage interface {
 	Description() string
 }
 
-type MilkTea struct {
-
-}
+type MilkTea struct {}
 
 func NewMilkTea() MilkTea {
 	return MilkTea{}
