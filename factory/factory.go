@@ -47,9 +47,17 @@ func NewSimpleStore() SimpleStore {
 	}
 }
 
+type AbstractFactoryMethodI interface {
+	Order(tp string) Product
+	create(tp string) Product
+}
 
 // AbstractFactoryMethod 抽象工厂方法
-type AbstractFactoryMethod struct {}
+// 通过实现接口实现多态，通过传入不同的creator来实现不同的子类create行为，而Order的行为不变
+// 变相实现子类自定义行为
+type AbstractFactoryMethod struct {
+	creator func(tp string) Product
+}
 
 func (afm AbstractFactoryMethod) Order(tp string) Product{
 	p := afm.create(tp)
@@ -58,16 +66,23 @@ func (afm AbstractFactoryMethod) Order(tp string) Product{
 }
 
 func (afm AbstractFactoryMethod) create(tp string) Product {
-	panic("implement me!")
+	if afm.creator == nil {
+		panic("nil creator!")
+	} else {
+		return afm.creator(tp)
+	}
 }
+
+func NewFactoryMethod(creator func(tp string)Product) AbstractFactoryMethod {
+	return AbstractFactoryMethod{
+		creator: creator,
+	}
+}
+
 
 // FactoryMethod 工厂方法
 type FactoryMethod struct {
 	AbstractFactoryMethod
-}
-
-func NewFactoryMethod() FactoryMethod {
-	return FactoryMethod{}
 }
 
 func (fm FactoryMethod)Order(tp string) Product {
